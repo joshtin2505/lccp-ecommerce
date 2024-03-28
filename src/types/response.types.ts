@@ -1,4 +1,4 @@
-import { UserErrorsType, UserSuccessType } from "./users.types"
+import { RolesType, UserErrorsType, UserSuccessType } from "./users.types"
 import { DataBaseErrorsType } from "./db.types"
 import { TokenErrorsType } from "./token.types"
 type LoginResolveType = {
@@ -12,4 +12,28 @@ type LoginRejectType =
       message: DataBaseErrorsType | TokenErrorsType
       error: unknown
     }
-export type { LoginResolveType, LoginRejectType }
+type VerifyResolveType = {
+  message: UserSuccessType
+  user: {
+    id: number // 👈 Cambiar al tipoo del id
+    role: RolesType
+  }
+}
+type VerifyRejectType =
+  | {
+      message: TokenErrorsType
+    }
+  | {
+      message: TokenErrorsType
+      error: unknown
+    }
+  | {
+      message: DataBaseErrorsType
+      error: unknown
+    }
+export type {
+  LoginResolveType,
+  LoginRejectType,
+  VerifyResolveType,
+  VerifyRejectType,
+}
