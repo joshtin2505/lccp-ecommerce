@@ -1,5 +1,6 @@
 import type {
   AxiosLoginResponse,
+  AxiosVerifyResponse,
   LoginUserForm,
   RegisterUserForm,
 } from "@/types/extended.types"
@@ -27,7 +28,8 @@ const updateApi = (user: RegisterUserForm) =>
 const deleteUserApi = (id: number) =>
   axios.delete(`${UsersRoutes.delete}/${id}`)
 
-const verifyToken = (token: string) => axios.get(UsersRoutes.verify)
+const verifyToken = (): Promise<AxiosVerifyResponse> =>
+  axios.get(UsersRoutes.verify)
 export {
   registerOrdinalApi,
   registerApi,
