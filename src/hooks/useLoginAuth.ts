@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { AuthContext } from "@/context/AuthContext"
+import useAuth from "./useAuth"
 
 type LoginErrors = {
   name: "email" | "password" | ""
@@ -13,7 +13,7 @@ type LoginErrors = {
  */
 export function useLoginAuth() {
   const router = useRouter()
-  const { response } = useContext(AuthContext)
+  const { response } = useAuth()
   const [errors, setErrors] = useState<LoginErrors>({
     name: "",
     message: "",
@@ -34,7 +34,6 @@ export function useLoginAuth() {
           name: "password",
           message: "Contraseña Incorrecta",
         })
-        console.log("Contraseña Incorrecta")
       } else if (message === "EMAIL_NOT_FOUND") {
         setErrors({
           name: "email",
@@ -50,6 +49,7 @@ export function useLoginAuth() {
       alert("Error Porfavor Intente de Nuevo o Contacte al Administrador")
     }
   }, [response])
+  // es asincronos
   return errors
 }
 
