@@ -1,7 +1,14 @@
 "use client"
+// -> Function imports
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { signIn } from "next-auth/react"
+import Link from "next/link"
+import { loginUserFormSchema } from "@/schemas/user.schemas"
+import type { LoginUserForm } from "@/types/extended.types"
+import useAuth from "@/hooks/useAuth"
+import { useLoginAuth } from "@/hooks/useLoginAuth"
+// -> UI imports
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -13,15 +20,10 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form"
-
 // import "./LoginForm.css"
-import Link from "next/link"
-import { loginUserFormSchema } from "@/schemas/user.schemas"
 import { BsGoogle } from "react-icons/bs"
-import type { LoginUserForm } from "@/types/extended.types"
-import { AuthContext } from "@/context/AuthContext"
-import { useContext } from "react"
-import { useLoginAuth } from "@/hooks/useLoginAuth"
+import { FiLoader } from "react-icons/fi"
+
 function LoginForm() {
   const form = useForm<LoginUserForm>({
     resolver: zodResolver(loginUserFormSchema), // 👈 resolver
@@ -32,12 +34,13 @@ function LoginForm() {
   })
 
   const { message, name } = useLoginAuth()
-  const { login } = useContext(AuthContext)
+  const { login, loading } = useAuth()
 
   function onSubmit(data: LoginUserForm) {
     login(data)
     const { setError } = form
     if (name === "") return
+
     setError(name, { message })
   }
 
@@ -83,8 +86,9 @@ function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="flex gap-1 w-full" disabled={loading}>
           Iniciar Sesion
+          {loading && <FiLoader size={20} className="animate-spin" />}
         </Button>
         <div className="w-full text-center">
           No tienes una cuenta?
