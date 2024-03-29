@@ -1,3 +1,10 @@
+/**
+ * @file AuthContext.tsx
+ * @desc This file contains the implementation of the AuthContext component.
+ * The AuthContext component provides authentication-related states and actions
+ * to its child components using the React Context API.
+ */
+
 import { ReactNode, createContext, useEffect, useState } from "react"
 import { loginApi, verifyToken } from "@/api/users.api"
 import type {
@@ -9,6 +16,10 @@ import { AxiosError } from "axios"
 import { LoginRejectType, VerifyRejectType } from "@/types/response.types"
 import Cookies from "js-cookie"
 import { RolesType } from "@/types/users.types"
+
+/**
+ * Represents the possible response types of authentication API calls.
+ */
 type AuthRes =
   | AxiosLoginResponse
   | AxiosError<LoginRejectType, any>["response"]
@@ -16,15 +27,26 @@ type AuthRes =
   | AxiosError<VerifyRejectType, any>["response"]
   | null
 
+/**
+ * Represents the state properties of the AuthContext component.
+ */
 interface AuthContextStates {
   response: AuthRes
   allowedRole: RolesType | null
   isAuthenticated: boolean
   loading: boolean
 }
+
+/**
+ * Represents the action methods of the AuthContext component.
+ */
 interface AuthContextActions {
   login: (data: LoginUserForm) => Promise<void>
 }
+
+/**
+ * Represents the AuthContext component.
+ */
 export const AuthContext = createContext<
   AuthContextStates & AuthContextActions
 >({
@@ -34,14 +56,23 @@ export const AuthContext = createContext<
   loading: true,
   login: async (data: LoginUserForm) => {},
 })
+
 const { Provider } = AuthContext
 
+/**
+ * Represents the AuthProvider component.
+ * @param children - The child components.
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [response, setResponse] = useState<AuthRes>(null)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [allowedRole, setAllowedRole] = useState<RolesType | null>(null)
   const [loading, setLoading] = useState(false)
 
+  /**
+   * Handles the login action.
+   * @param data - The login user form data.
+   */
   const login = async (data: LoginUserForm) => {
     loginApi(data)
       .then((res) => {
@@ -53,6 +84,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    /**
+     * Checks if the user is logged in.
+     */
     async function checkLogin() {
       const cookies = Cookies.get()
 
@@ -86,6 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     checkLogin()
   }, [])
+
   return (
     <Provider
       value={{
