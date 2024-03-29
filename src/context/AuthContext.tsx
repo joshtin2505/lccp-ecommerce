@@ -74,12 +74,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * @param data - The login user form data.
    */
   const login = async (data: LoginUserForm) => {
+    setLoading(true)
     loginApi(data)
       .then((res) => {
         setResponse(res)
+        setLoading(false)
       })
       .catch((err: AxiosError<LoginRejectType>) => {
         setResponse(err.response)
+        setLoading(false)
       })
   }
 
