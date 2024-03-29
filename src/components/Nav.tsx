@@ -1,3 +1,4 @@
+"use client"
 import "./Nav.css"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
