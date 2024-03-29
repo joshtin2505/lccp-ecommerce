@@ -1,14 +1,18 @@
 import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AuthContext } from "@/context/AuthContext"
-import clsx from "clsx"
+
 type LoginErrors = {
   name: "email" | "password" | ""
   message: string
 }
 
+/**
+ * Custom hook for handling login authentication.
+ * @returns {LoginErrors} The login errors object.
+ */
 export function useLoginAuth() {
-  // const router = useRouter()
+  const router = useRouter()
   const { response } = useContext(AuthContext)
   const [errors, setErrors] = useState<LoginErrors>({
     name: "",
@@ -22,6 +26,7 @@ export function useLoginAuth() {
     const { message } = data
     if (status === 200) {
       if (message === "USER_LOGGED") {
+        router.push("/")
       }
     } else if (status === 401) {
       if (message === "INCORRECT_PASSWORD") {
@@ -48,4 +53,4 @@ export function useLoginAuth() {
   return errors
 }
 
-// que el backend devuelva su propios errores y listo
+// que el backend devuelva su propios errores y listo 😒

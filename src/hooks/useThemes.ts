@@ -1,3 +1,9 @@
+/**
+ * Custom hook for managing themes in the application.
+ * It provides functionality to set and retrieve the current theme.
+ *
+ * @returns An object containing the current theme and a function to set the theme.
+ */
 "use client"
 import {
   BgColor,
@@ -8,6 +14,10 @@ import {
   TxtColor,
 } from "@/types/types"
 import { useEffect, useState } from "react"
+
+/**
+ * The light theme color values.
+ */
 const lightTheme: ThemeColor = {
   primary: {
     Color300: "#209BAF",
@@ -50,6 +60,10 @@ const lightTheme: ThemeColor = {
     normalColor: "#969696",
   },
 }
+
+/**
+ * The dark theme color values.
+ */
 const darkTheme: ThemeColor = {
   primary: {
     Color300: "#209BAF",
@@ -92,27 +106,27 @@ const darkTheme: ThemeColor = {
     normalColor: "#787878",
   },
 }
+
+/**
+ * Custom hook for managing themes in the application.
+ * It provides functionality to set and retrieve the current theme.
+ */
 const useTheme = () => {
-  const [themeExternalView, setThemeExternalView] = useState<"light" | "dark">() // state for external view theme
-  const [theme, setTheme] = useState<Theme>() // external state for update theme type 'light' | 'dark' | system
+  const [themeExternalView, setThemeExternalView] = useState<"light" | "dark">()
+  const [theme, setTheme] = useState<Theme>()
 
   useEffect(() => {
-    // get theme from localstorage or system
     if (window.localStorage.getItem("theme")) {
-      // if theme is in localstorage
       setTheme(window.localStorage.getItem("theme") as Theme)
       return
     } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      // if theme is not in localstorage but system is dark
       setTheme("dark")
     } else {
-      // if theme is not in localstorage but system is light
       setTheme("light")
     }
   }, [])
 
   useEffect(() => {
-    // set theme to page and localstorage
     if (theme === "dark") {
       document.querySelector("html")?.classList.add("dark")
       window.localStorage.setItem("theme", theme)
@@ -134,7 +148,6 @@ const useTheme = () => {
     }
   }, [theme])
 
-  // this is depercated
   if (themeExternalView === "light") {
     setCssTheme({ themeColors: lightTheme })
   } else if (themeExternalView === "dark") {
@@ -143,12 +156,15 @@ const useTheme = () => {
   return { setTheme, theme: themeExternalView }
 }
 
+/**
+ * Sets the CSS theme based on the provided theme colors.
+ *
+ * @param themeColors - The theme colors to set.
+ */
 function setCssTheme({ themeColors }: { themeColors: ThemeColor }) {
   if (typeof document !== "undefined") {
-    // this runtime in client
     const rootElement = document.documentElement
     const style = rootElement.style
-    // Colors keys
     const primaryColorKey = Object.keys(themeColors.primary)
     const secondaryColorKey = Object.keys(themeColors.secondary)
     const tertiaryColorKey = Object.keys(themeColors.tertiary)
@@ -182,7 +198,12 @@ function setCssTheme({ themeColors }: { themeColors: ThemeColor }) {
     })
   }
 }
-// Set Colors to css
+
+/**
+ * Sets the colors to the CSS.
+ *
+ * @param params - The parameters for setting the colors.
+ */
 interface SetColorsParams {
   style: CSSStyleDeclaration
   color: GrupoColor
