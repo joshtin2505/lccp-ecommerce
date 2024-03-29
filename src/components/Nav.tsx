@@ -1,4 +1,3 @@
-"use client"
 import "./Nav.css"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -18,13 +17,17 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useCart } from "@/hooks/useCart"
 import useTheme from "@/hooks/useThemes"
 import { Theme } from "@/types/types"
+
+/**
+ * Renders the navigation component.
+ */
 function Nav() {
-  const pathname = usePathname() // Get the current pathname
-  const [navDropDown, setNavDropDown] = useState<boolean>(false) // State to control the dropdown menu
+  const pathname = usePathname()
+  const [navDropDown, setNavDropDown] = useState<boolean>(false)
+
   return (
     <header className="home-header">
       <nav className="nav">
-        {/* Logo */}
         <Link className="logoContainer" href="/">
           <Image
             src="/logo.webp"
@@ -34,9 +37,7 @@ function Nav() {
             alt="logo"
           />
         </Link>
-        {/* Links */}
         <NavOptions pathname={pathname} type="normal" />
-        {/* Hamburger Logo for dropdown*/}
         <button
           onClick={(e) => {
             e.stopPropagation()
@@ -46,7 +47,6 @@ function Nav() {
         >
           {navDropDown ? <BsXLg size={24} /> : <BsList size={24} />}
         </button>
-        {/* Dropdown */}
         <AnimatePresence>
           {navDropDown && <NavOptions pathname={pathname} type="dropdown" />}
         </AnimatePresence>
@@ -54,17 +54,22 @@ function Nav() {
     </header>
   )
 }
+
 interface LinksProps {
-  // Props for the OptionsLinks component
   pathname: string
   type: "normal" | "dropdown"
 }
+
+/**
+ * Renders the navigation options.
+ * @param pathname - The current pathname.
+ * @param type - The type of navigation options to render.
+ */
 function OptionsLinks({ pathname, type }: LinksProps) {
-  // Component to render the links
   const hidden =
-    type === "normal" ? "md:flex hidden" : "flex md:hidden flex-col" // If the type is normal, we hide the dropdown, if not, we show it
+    type === "normal" ? "md:flex hidden" : "flex md:hidden flex-col"
+
   return (
-    // We render the links
     <ul className={"gap-4 items-center justify-center text-center " + hidden}>
       <Link className={pathname === "/" ? "linkSelected" : "links"} href="/">
         Inicio
@@ -98,11 +103,15 @@ function OptionsLinks({ pathname, type }: LinksProps) {
     </ul>
   )
 }
+
+/**
+ * Renders the navigation options based on the type.
+ * @param pathname - The current pathname.
+ * @param type - The type of navigation options to render.
+ */
 function NavOptions({ pathname, type }: LinksProps) {
-  // Component to render the links
   if (type === "dropdown") {
     return (
-      // If the type is dropdown, we use the motion component to animate the dropdown
       <motion.ul
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -114,20 +123,21 @@ function NavOptions({ pathname, type }: LinksProps) {
       </motion.ul>
     )
   }
-  return (
-    // If the type is normal, we just render the OptionsLinks component
-    <OptionsLinks pathname={pathname} type="normal" />
-  )
+  return <OptionsLinks pathname={pathname} type="normal" />
 }
+
+/**
+ * Renders the cart component.
+ */
 function Cart() {
-  const [isClient, setIsClient] = useState(false) // State to check if the component is mounted
-  const { cart, setOpenCart, openCart } = useCart() // We get the cart and the setOpenCart function from the useCart hook
+  const [isClient, setIsClient] = useState(false)
+  const { cart, setOpenCart, openCart } = useCart()
+
   useEffect(() => {
-    // We set the isClient state to true when the component is mounted
     setIsClient(true)
   }, [openCart])
+
   if (isClient) {
-    // If the component is mounted, we render the cart button
     return (
       <button
         onClick={() => setOpenCart(true)}
@@ -139,13 +149,19 @@ function Cart() {
     )
   }
 }
-function ThemeDropDown() {
-  // Component to render the theme dropdown
 
+/**
+ * Renders the theme dropdown component.
+ */
+function ThemeDropDown() {
   const [dropDown, setDropDown] = useState(false)
   const { setTheme, theme } = useTheme()
   const dropDownRef = useRef<HTMLUListElement>(null)
 
+  /**
+   * Handles the change of theme.
+   * @param newTheme - The new theme to set.
+   */
   const handleChangeTheme = (newTheme: Theme) => {
     setTheme(newTheme)
   }
@@ -165,6 +181,7 @@ function ThemeDropDown() {
       document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [])
+
   return (
     <div className="relative flex items-center justify-center">
       <button
@@ -223,4 +240,5 @@ function ThemeDropDown() {
     </div>
   )
 }
+
 export default Nav
