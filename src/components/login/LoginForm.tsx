@@ -6,8 +6,8 @@ import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { loginUserFormSchema } from "@/schemas/user.schemas"
 import type { LoginUserForm } from "@/types/extended.types"
-import useAuth from "@/hooks/useAuthContext"
-import { useLoginAuth } from "@/hooks/useLoginAuth"
+import useAuthContext from "@/hooks/useAuthContext"
+import useLoginResHandler from "@/hooks/useLoginResHandler"
 // -> UI imports
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -34,8 +34,8 @@ function LoginForm() {
     },
   })
 
-  const { message, name } = useLoginAuth()
-  const { login, loading } = useAuth()
+  const { message, name } = useLoginResHandler()
+  const { login, loading } = useAuthContext()
   const { setError } = form
 
   function onSubmit(data: LoginUserForm) {

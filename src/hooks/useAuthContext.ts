@@ -6,7 +6,7 @@ import { useContext } from "react"
  * @returns The authentication context.
  * @throws {Error} If used outside of an AuthProvider.
  */
-function useAuth() {
+function useAuthContext() {
   const context = useContext(AuthContext)
 
   if (context == undefined) {
@@ -16,4 +16,4 @@ function useAuth() {
   return context
 }
 
-export default useAuth
+export default useAuthContext
