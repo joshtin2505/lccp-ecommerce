@@ -11,6 +11,7 @@ import type {
   AxiosLoginResponse,
   AxiosVerifyResponse,
   LoginUserForm,
+  RegisterUserForm,
 } from "@/types/extended.types"
 import { AxiosError } from "axios"
 import { LoginRejectType, VerifyRejectType } from "@/types/response.types"
@@ -42,6 +43,7 @@ interface AuthContextStates {
  */
 interface AuthContextActions {
   login: (data: LoginUserForm) => Promise<void>
+  register: (data: RegisterUserForm) => Promise<void>
 }
 
 /**
@@ -55,6 +57,7 @@ export const AuthContext = createContext<
   isAuthenticated: false,
   loading: true,
   login: async (data: LoginUserForm) => {},
+  register: async (data: RegisterUserForm) => {},
 })
 
 const { Provider } = AuthContext
@@ -74,6 +77,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * @param data - The login user form data.
    */
   const login = async (data: LoginUserForm) => {
+    setLoading(true)
+    loginApi(data)
+      .then((res) => {
+        setResponse(res)
+        setLoading(false)
+      })
+      .catch((err: AxiosError<LoginRejectType>) => {
+        setResponse(err.response)
+        setLoading(false)
+      })
+  }
+  const register = async (data: RegisterUserForm) => {
     setLoading(true)
     loginApi(data)
       .then((res) => {
@@ -127,8 +142,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <Provider
       value={{
-        response,
         login,
+        register,
+        response,
         isAuthenticated,
         allowedRole,
         loading,
