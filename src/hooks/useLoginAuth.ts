@@ -49,7 +49,7 @@ export function useLoginAuth() {
       alert("Error Porfavor Intente de Nuevo o Contacte al Administrador")
     }
   }, [response])
-  // es asincronos
+  // es asincrono
   return errors
 }
 
