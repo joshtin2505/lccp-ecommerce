@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import useAuth from "./useAuth"
+import useAuthContext from "./useAuthContext"
 
 type LoginErrors = {
   name: "email" | "password" | ""
@@ -11,9 +11,9 @@ type LoginErrors = {
  * Custom hook for handling login authentication.
  * @returns {LoginErrors} The login errors object.
  */
-export function useLoginAuth() {
+function useLoginResponseHandler() {
   const router = useRouter()
-  const { response } = useAuth()
+  const { response } = useAuthContext()
   const [errors, setErrors] = useState<LoginErrors>({
     name: "",
     message: "",
@@ -49,8 +49,9 @@ export function useLoginAuth() {
       alert("Error Porfavor Intente de Nuevo o Contacte al Administrador")
     }
   }, [response])
+  console.log("render")
   // es asincrono
   return errors
 }
 
-// que el backend devuelva su propios errores y listo 😒
+export default useLoginResponseHandler
