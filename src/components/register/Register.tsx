@@ -14,13 +14,14 @@ import {
   FormMessage,
 } from "../ui/form"
 
-import "./SignUpForm.css"
+import "./Register.css"
 import Link from "next/link"
 import { registerUserFormSchema } from "@/schemas/user.schemas"
 import { BsGoogle } from "react-icons/bs"
 import type { RegisterUserForm } from "@/types/extended.types"
+import useAuth from "@/hooks/useAuth"
 
-function SignUpForm() {
+function RegisterForm() {
   const form = useForm<RegisterUserForm>({
     resolver: zodResolver(registerUserFormSchema), // 👈 resolver
     defaultValues: {
@@ -31,6 +32,13 @@ function SignUpForm() {
       confirmPassword: "",
     },
   })
+
+  const { register } = useAuth()
+  function onSubmit(data: RegisterUserForm) {
+    console.log(data)
+    register(data)
+  }
+
   return (
     <Form {...form}>
       <form
@@ -50,7 +58,7 @@ function SignUpForm() {
                 <FormLabel>Nombre</FormLabel>
                 <FormControl>
                   <Input
-                    className="input-SignUpForm"
+                    className="input-RegisterForm"
                     placeholder="juan"
                     {...field}
                   />
@@ -68,7 +76,7 @@ function SignUpForm() {
                 <FormLabel>Apellidos</FormLabel>
                 <FormControl>
                   <Input
-                    className="input-SignUpForm"
+                    className="input-RegisterForm"
                     placeholder="perez"
                     {...field}
                   />
@@ -87,7 +95,7 @@ function SignUpForm() {
               <FormLabel>Correo</FormLabel>
               <FormControl>
                 <Input
-                  className="input-SignUpForm"
+                  className="input-RegisterForm"
                   placeholder="juanperez@gmail.com"
                   {...field}
                 />
@@ -106,7 +114,7 @@ function SignUpForm() {
                 <FormLabel>Contraseña</FormLabel>
                 <FormControl>
                   <Input
-                    className="input-SignUpForm"
+                    className="input-RegisterForm"
                     type="password"
                     {...field}
                   />
@@ -124,7 +132,7 @@ function SignUpForm() {
                 <FormLabel>Confirma tu Contraseña</FormLabel>
                 <FormControl>
                   <Input
-                    className="input-SignUpForm"
+                    className="input-RegisterForm"
                     type="password"
                     {...field}
                   />
@@ -161,7 +169,4 @@ function SignUpForm() {
   )
 }
 
-function onSubmit(data: RegisterUserForm) {
-  console.log(data)
-}
-export default SignUpForm
+export default RegisterForm
