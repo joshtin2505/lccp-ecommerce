@@ -19,7 +19,7 @@ import Link from "next/link"
 import { registerUserFormSchema } from "@/schemas/user.schemas"
 import { BsGoogle } from "react-icons/bs"
 import type { RegisterUserForm } from "@/types/extended.types"
-import useAuth from "@/hooks/useAuth"
+import useAuth from "@/hooks/useAuthContext"
 
 function RegisterForm() {
   const form = useForm<RegisterUserForm>({
