@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { loginUserFormSchema } from "@/schemas/user.schemas"
 import type { LoginUserForm } from "@/types/extended.types"
-import useAuth from "@/hooks/useAuth"
+import useAuth from "@/hooks/useAuthContext"
 import { useLoginAuth } from "@/hooks/useLoginAuth"
 // -> UI imports
 import { Button } from "@/components/ui/button"
@@ -23,6 +23,7 @@ import {
 // import "./LoginForm.css"
 import { BsGoogle } from "react-icons/bs"
 import { FiLoader } from "react-icons/fi"
+import { useEffect } from "react"
 
 function LoginForm() {
   const form = useForm<LoginUserForm>({
@@ -35,14 +36,15 @@ function LoginForm() {
 
   const { message, name } = useLoginAuth()
   const { login, loading } = useAuth()
+  const { setError } = form
 
   function onSubmit(data: LoginUserForm) {
     login(data)
-    const { setError } = form
-    if (name === "") return
-
-    setError(name, { message })
   }
+  useEffect(() => {
+    if (name === "") return
+    setError(name, { message })
+  }, [message, name])
 
   return (
     <Form {...form}>
