@@ -6,7 +6,7 @@
  */
 
 import { ReactNode, createContext, useEffect, useState } from "react"
-import { loginApi, verifyToken } from "@/api/users.api"
+import { loginApi, verifyToken, registerOrdinalApi } from "@/api/users.api"
 import type {
   AxiosLoginResponse,
   AxiosVerifyResponse,
@@ -77,20 +77,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
    * @param data - The login user form data.
    */
   const login = async (data: LoginUserForm) => {
+    //✅
     setLoading(true)
     loginApi(data)
       .then((res) => {
-        setResponse(res)
+        // setResponse(res)
         setLoading(false)
       })
-      .catch((err: AxiosError<LoginRejectType>) => {
-        setResponse(err.response)
+      .catch((err: AxiosError<any[]>) => {
+        // create type
+        // setResponse(err.response)
+        console.log(err.response)
         setLoading(false)
       })
   }
+
+  /**
+   * Handles the registration action.
+   * @param data - The register user form data.
+   */
   const register = async (data: RegisterUserForm) => {
     setLoading(true)
-    loginApi(data)
+    registerOrdinalApi(data)
       .then((res) => {
         setResponse(res)
         setLoading(false)
